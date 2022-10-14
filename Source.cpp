@@ -77,5 +77,6 @@ int main(int argc, char** argv)
 	clock_t end_time = clock();
 
 	write_matrix(ñ, end_time - start_time, volume);
+
 	return 0;
 }
