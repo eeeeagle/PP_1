@@ -36,20 +36,6 @@ Matrix<T> multiply_matrix(const Matrix<T>& a, const Matrix<T>& b)
 }
 
 template<typename T>
-void print(const Matrix<T>& matrix)
-{
-	for (auto iter_ = matrix.begin(); iter_ != matrix.end(); iter_++)
-	{
-		for (auto iter = iter_->begin(); iter != iter_->end(); iter++)
-		{
-			std::cout << *iter << ' ';
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
-}
-
-template<typename T>
 void read_matrix(Matrix<T>& matrix, const std::string& filepath)
 {
 	std::ifstream file;
@@ -163,6 +149,7 @@ int main(int argc, char** argv)
 		std::cout << "WRITING ERROR: " << ex.what() << std::endl;
 		_exit(EXIT_FAILURE);
 	}
+
 	std::cout << "DONE" << std::endl;
 	return 0;
 }
