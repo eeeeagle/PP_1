@@ -84,7 +84,7 @@ void write_matrix(const Matrix<T>& matrix, const double& runtime, const unsigned
 		file << std::endl;
 	}
 	file << std::endl;
-	file << "Runtime: " << runtime << " ms" << std::endl;
+	file << "Runtime: " << runtime << " microseconds" << std::endl;
 	file << " Volume: " << volume << std::endl;
 
 	file.close();
