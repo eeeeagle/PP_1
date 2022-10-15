@@ -62,7 +62,7 @@ void read_matrix(Matrix<T>& matrix, const std::string& filepath)
 		for (auto iter = matrix.begin() + 1; iter != matrix.end(); iter++)
 		{
 			if (iter->size() != dim)
-				throw std::logic_error("Matrix dimmension mismatch (" + filepath + ")");
+				throw std::logic_error("Matrix dimmension mismatch in file \"" + filepath + '\"');
 		}
 	}
 }
@@ -127,7 +127,7 @@ int main(int argc, char** argv)
 	}
 	catch (std::logic_error const& ex)
 	{
-		std::cout << ex.what() << std::endl;
+		std::cout << "LOGIC ERROR: " << ex.what() << std::endl;
 		_exit(EXIT_FAILURE);
 	}
 
