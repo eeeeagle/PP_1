@@ -3,9 +3,7 @@
 #include <string>
 #include <sstream>
 #include <vector>
-
-#include <windows.h>
-#include <shlobj.h>
+#include <chrono>
 
 template<typename T>
 using Matrix = std::vector<std::vector<T>>;
@@ -38,11 +36,25 @@ Matrix<T> multiply_matrix(const Matrix<T>& a, const Matrix<T>& b)
 }
 
 template<typename T>
-int read_matrix(Matrix<T>& matrix, const std::string& filepath)
+void print(const Matrix<T>& matrix)
 {
-	std::ifstream file(filepath);
-	if (!file.is_open())
-		return -1;
+	for (auto iter_ = matrix.begin(); iter_ != matrix.end(); iter_++)
+	{
+		for (auto iter = iter_->begin(); iter != iter_->end(); iter++)
+		{
+			std::cout << *iter << ' ';
+		}
+		std::cout << std::endl;
+	}
+	std::cout << std::endl;
+}
+
+template<typename T>
+void read_matrix(Matrix<T>& matrix, const std::string& filepath)
+{
+	std::ifstream file;
+	file.exceptions(std::ifstream::badbit);
+	file.open(filepath);
 
 	std::string buffer;
 	while (getline(file, buffer))
@@ -56,45 +68,50 @@ int read_matrix(Matrix<T>& matrix, const std::string& filepath)
 
 		matrix.push_back(temp);
 	}
-
 	file.close();
-	return 0;
+
+	if (!matrix.empty())
+	{
+		size_t dim = matrix.begin()->size();
+		for (auto iter = matrix.begin() + 1; iter != matrix.end(); iter++)
+		{
+			if (iter->size() != dim)
+				throw std::logic_error("Matrix dimmension mismatch (" + filepath + ")");
+		}
+	}
 }
 
 template<typename T>
-int write_matrix(	const Matrix<T>&	matrix,
-					const unsigned&		runtime, 
-					const unsigned&		volume,
-					const std::string&	filepath = "output.txt")
+void write_matrix(const Matrix<T>& matrix, const double& runtime, const unsigned& volume, const std::string& filepath = "output.txt")
 {
-	std::ofstream file(filepath);
-	if (!file.is_open())
-		return -1;
+	std::ofstream file;
+	file.exceptions(std::ofstream::badbit);
+	file.open(filepath);
 		
 	for (auto iter_ = matrix.begin(); iter_ != matrix.end(); iter_++)
 	{
 		for (auto iter = iter_->begin(); iter != iter_->end(); iter++)
 		{
 			file << *iter;
-			file << (iter != (iter_->end() - 1) ? ' ' : '\n');
+			file << ' ';
 		}
+		file << std::endl;
 	}
-	file << std::endl << std::endl;
+	file << std::endl;
 	file << "Runtime: " << runtime << " ms" << std::endl;
 	file << " Volume: " << volume << std::endl;
 
 	file.close();
-	return 0;
 }
 
 int main(int argc, char** argv)
 {
 	if (argc != 3)
 	{
-		std::cout	<< "Locate paths to matrix files in arguments"			<< std::endl
-                    << "EXAMPLE:"											<< std::endl
-                    << "    .../PP_1.exe <matrix_1_path> <matrix_2_path>"	<< std::endl;
-        exit(EXIT_FAILURE);
+		std::cout	<< "Locate paths to matrix files in arguments and to output file (optional)"	<< std::endl
+                    << "EXAMPLE:"																	<< std::endl
+                    << "    .../PP_1.exe <matrix_1_path> <matrix_2_path> <output_path>"				<< std::endl;
+        _exit(EXIT_FAILURE);
 	}
 
 	try
@@ -108,20 +125,44 @@ int main(int argc, char** argv)
 	catch (std::invalid_argument const& ex)
 	{
 		std::cout << std::string("INVALID ARGUMENT [") << ex.what() << std::endl;
-		exit(EXIT_FAILURE);
+		_exit(EXIT_FAILURE);
 	}
 
 	Matrix<int> a, b;
-	read_matrix(a, argv[1]);
-	read_matrix(b, argv[2]);
+	try
+	{
+		read_matrix(a, argv[1]);
+		read_matrix(b, argv[2]);
+	}
+	catch (std::ios_base::failure const& ex)
+	{
+		std::cout << "READING ERROR: " << ex.what() << std::endl;
+		_exit(EXIT_FAILURE);
+	}
+	catch (std::logic_error const& ex)
+	{
+		std::cout << ex.what() << std::endl;
+		_exit(EXIT_FAILURE);
+	}
 
 	unsigned volume = 0; /* ??? */
 
-	clock_t start_time = clock();
+	auto start_time = std::chrono::high_resolution_clock::now();
 	Matrix<int> c = multiply_matrix(a, b);
-	clock_t end_time = clock();
-
-	write_matrix(c, end_time - start_time, volume);
-
+	auto end_time = std::chrono::high_resolution_clock::now();
+	
+	try
+	{
+		if (argc == 4)
+			write_matrix(c, std::chrono::duration<double, std::micro>(end_time - start_time).count(), volume, argv[3]);
+		else
+			write_matrix(c, std::chrono::duration<double, std::micro>(end_time - start_time).count(), volume);
+	}
+	catch (std::ios_base::failure const& ex)
+	{
+		std::cout << "WRITING ERROR: " << ex.what() << std::endl;
+		_exit(EXIT_FAILURE);
+	}
+	std::cout << "DONE" << std::endl;
 	return 0;
 }
