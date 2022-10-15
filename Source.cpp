@@ -92,7 +92,7 @@ void write_matrix(const Matrix<T>& matrix, const double& runtime, const unsigned
 
 int main(int argc, char** argv)
 {
-	if (argc != 3)
+	if (argc < 3 || argc > 4)
 	{
 		std::cout	<< "Locate paths to matrix files in arguments and to output file (optional)"	<< std::endl
                     << "EXAMPLE:"																	<< std::endl
