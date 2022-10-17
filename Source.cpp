@@ -68,7 +68,7 @@ void read_matrix(Matrix<T>& matrix, const std::string& filepath)
 }
 
 template<typename T>
-void write_matrix(const Matrix<T>& matrix, const double& runtime, const unsigned& volume, const std::string& filepath = "output.txt")
+void write_matrix(const Matrix<T>& matrix, const double& runtime, const size_t& volume, const std::string& filepath = "output.txt")
 {
 	std::ofstream file;
 	file.exceptions(std::ofstream::badbit);
@@ -84,8 +84,8 @@ void write_matrix(const Matrix<T>& matrix, const double& runtime, const unsigned
 		file << std::endl;
 	}
 	file << std::endl;
-	file << "Runtime: " << runtime << " microseconds" << std::endl;
-	file << " Volume: " << volume << std::endl;
+	file << "Runtime: " << runtime << " microseconds\n";
+	file << " Volume: " << volume << '\n';
 
 	file.close();
 }
@@ -94,9 +94,9 @@ int main(int argc, char** argv)
 {
 	if (argc < 3 || argc > 4)
 	{
-		std::cout	<< "Locate paths to matrix files in arguments and to output file (optional)"	<< std::endl
-                    << "EXAMPLE:"																	<< std::endl
-                    << "    .../PP_1.exe <matrix_1_path> <matrix_2_path> <output_path>"				<< std::endl;
+		std::cout	<< "Locate paths to matrix files in arguments and to output file (optional)\n"
+					<< "EXAMPLE:\n"
+					<< "    .../PP_1.exe <matrix_1_path> <matrix_2_path> <output_path>\n";
         _exit(EXIT_FAILURE);
 	}
 
@@ -110,7 +110,7 @@ int main(int argc, char** argv)
 	}
 	catch (std::invalid_argument const& ex)
 	{
-		std::cout << std::string("INVALID ARGUMENT [") << ex.what() << std::endl;
+		std::cout << std::string("INVALID ARGUMENT [") << ex.what() << '\n';
 		_exit(EXIT_FAILURE);
 	}
 
@@ -122,20 +122,20 @@ int main(int argc, char** argv)
 	}
 	catch (std::ios_base::failure const& ex)
 	{
-		std::cout << "READING ERROR: " << ex.what() << std::endl;
+		std::cout << "READING ERROR: " << ex.what() << '\n';
 		_exit(EXIT_FAILURE);
 	}
 	catch (std::logic_error const& ex)
 	{
-		std::cout << "LOGIC ERROR: " << ex.what() << std::endl;
+		std::cout << "LOGIC ERROR: " << ex.what() << '\n';
 		_exit(EXIT_FAILURE);
 	}
-
-	unsigned volume = 0; /* ??? */
 
 	auto start_time = std::chrono::high_resolution_clock::now();
 	Matrix<int> c = multiply_matrix(a, b);
 	auto end_time = std::chrono::high_resolution_clock::now();
+
+	const size_t volume = c.size() * c.begin()->size();
 	
 	try
 	{
@@ -146,10 +146,10 @@ int main(int argc, char** argv)
 	}
 	catch (std::ios_base::failure const& ex)
 	{
-		std::cout << "WRITING ERROR: " << ex.what() << std::endl;
+		std::cout << "WRITING ERROR: " << ex.what() << '\n';
 		_exit(EXIT_FAILURE);
 	}
 
-	std::cout << "DONE" << std::endl;
+	std::cout << "DONE\n";
 	return 0;
 }
