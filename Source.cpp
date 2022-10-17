@@ -81,9 +81,9 @@ void write_matrix(const Matrix<T>& matrix, const double& runtime, const size_t& 
 			file << *iter;
 			file << ' ';
 		}
-		file << std::endl;
+		file << '\n';
 	}
-	file << std::endl;
+	file << '\n';
 	file << "Runtime: " << runtime << " microseconds\n";
 	file << " Volume: " << volume << '\n';
 
