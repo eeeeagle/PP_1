@@ -4,10 +4,8 @@
 
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <sstream>
 #include <vector>
-#include <chrono>
 
 template<typename T>
 using Matrix = std::vector<std::vector<T>>;
@@ -41,7 +39,6 @@ void read_file(Matrix<T>& matrix, const std::string& filepath)
 		file.exceptions(std::ifstream::badbit);
 		file.open(filepath);
 
-		Matrix<T> matrix;
 		for (std::string buffer; getline(file, buffer); )
 		{
 			std::stringstream iss(buffer);
@@ -66,7 +63,6 @@ void read_file(Matrix<T>& matrix, const std::string& filepath)
 			if (iter->size() != size)
 				throw std::logic_error("Matrix dimmension mismatch in file \"" + filepath + '\"');
 		}
-		return matrix;
 	}
 	catch (std::ios_base::failure const& ex)
 	{
