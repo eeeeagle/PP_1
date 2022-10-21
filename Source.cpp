@@ -13,7 +13,7 @@ bool is_exists(const std::string& name)
 
 int main(int argc, char** argv)
 {
-	system("title Parallel Programming | Lab ¹ 1");
+	system("title Parallel Programming [Lab ¹ 1]");
 
 	if (argc > 4)
 	{
