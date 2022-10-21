@@ -77,7 +77,7 @@ void read_file(Matrix<T>& matrix, const std::string& filepath)
 }
 
 template<typename T>
-void write_file(const Matrix<T>& matrix, const double& runtime, const std::string& filepath = "output.txt")
+void write_file(const Matrix<T>& matrix, const double& runtime, const std::string& filepath)
 {
 	try
 	{
