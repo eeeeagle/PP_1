@@ -45,17 +45,17 @@ int main(int argc, char** argv)
 
 		if (argc != 4)
 		{
-			std::cout << "Locate path to output file? (Y/N)";
+			std::cout << "\nLocate path to output file? (Y/N)";
 			int key;
 			do
 			{
 				key = _getch();
 				key = toupper(key);
 			} while (key != 'Y' && key != 'N');
-			std::cout << "\r                                         ";
+			std::cout << "\r                                       \r";
 			if (key == 'Y')
 			{
-				std::cout << "\rLocate path to output file: ";
+				std::cout << "Locate path to output file: ";
 				std::cin >> str[2];
 			}
 			else
@@ -70,25 +70,26 @@ int main(int argc, char** argv)
 		_exit(EXIT_FAILURE);
 	}
 
-	system("cls");
 	Matrix<unsigned long> a, b;
 
 	std::cout << "Reading matrix A";
-	read_file(a, argv[1]);
+	read_file(a, str[0]);
 
 	std::cout << "\rReading matrix B";
-	read_file(b, argv[2]);
+	read_file(b, str[1]);
 
 	std::cout << "\rPerforming C = A * B";
 	auto start_time = Time::now();
 	Matrix<unsigned long> c = a * b;
 	auto end_time = Time::now();
 	
-	std::cout << "\rWriting matrix C to file \"" << str[2] << '\"';
+	std::cout << "\rWriting matrix C to file [" << str[2] << "]";
 	write_file(c, ms(end_time - start_time).count(), str[2]);
+	std::cout << "\r                                ";
+	for (int i = str[2].size(); i > 0; i--)
+		std::cout << ' ';
 	
-	system("cls");
-	std::cout << "DONE\nSee result in \"" << str[2] << "\" file\n";
+	std::cout << "\rSaved matrix in file [" << str[2] << "]\n";
 	system("pause > nul");
 	return 0;
 }
