@@ -43,8 +43,8 @@ void read_file(Matrix<T>& matrix, const std::string& filepath)
 		{
 			std::stringstream iss(buffer);
 
-			int number;
-			std::vector<int> temp;
+			T number;
+			std::vector<T> temp;
 			while (iss >> number)
 				temp.push_back(number);
 

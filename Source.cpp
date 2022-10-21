@@ -71,7 +71,7 @@ int main(int argc, char** argv)
 	}
 
 	system("cls");
-	Matrix<int> a, b;
+	Matrix<unsigned long> a, b;
 
 	std::cout << "Reading matrix A";
 	read_file(a, argv[1]);
@@ -81,7 +81,7 @@ int main(int argc, char** argv)
 
 	std::cout << "\rPerforming C = A * B";
 	auto start_time = Time::now();
-	Matrix<int> c = a * b;
+	Matrix<unsigned long> c = a * b;
 	auto end_time = Time::now();
 	
 	std::cout << "\rWriting matrix C to file \"" << str[2] << '\"';
