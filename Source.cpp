@@ -2,7 +2,7 @@
 #include <chrono>
 #include <conio.h>
 
-typedef std::chrono::duration<double, std::micro> ms;
+typedef std::chrono::duration<double> seconds;
 typedef std::chrono::high_resolution_clock Time;
 
 bool is_exists(const std::string& name) 
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
 	auto end_time = Time::now();
 	
 	std::cout << "\rWriting matrix C to file [" << str[2] << "]";
-	write_file(c, ms(end_time - start_time).count(), str[2]);
+	write_file(c, seconds(end_time - start_time).count(), str[2]);
 	std::cout << "\r                                ";
 	for (int i = str[2].size(); i > 0; i--)
 		std::cout << ' ';
