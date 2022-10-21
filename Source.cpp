@@ -30,14 +30,20 @@ int main(int argc, char** argv)
 		_exit(EXIT_FAILURE);
 	}
 
-	Matrix<int> a(argv[1]);
-	Matrix<int> b(argv[2]);
+
+	Matrix<int> a, b;
+	read_file(a, argv[1]);
+	read_file(b, argv[2]);
+
+	auto start_time = std::chrono::high_resolution_clock::now();
 	Matrix<int> c = a * b;
+	auto end_time = std::chrono::high_resolution_clock::now();
 	
 	if (argc == 4)
-		c.write_file(argv[3]);
+		write_file(c, std::chrono::duration<double, std::micro>(end_time - start_time).count(), argv[3]);
 	else
-		c.write_file();
+		write_file(c, std::chrono::duration<double, std::micro>(end_time - start_time).count());
+
 
 	std::cout << "DONE\n";
 	return 0;
