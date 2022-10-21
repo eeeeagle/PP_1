@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 				key = toupper(key);
 			} while (key != 'Y' && key != 'N');
 			std::cout << "\r                                         ";
-			if (key == 'y')
+			if (key == 'Y')
 			{
 				std::cout << "\rLocate path to output file: ";
 				std::cin >> str[2];
