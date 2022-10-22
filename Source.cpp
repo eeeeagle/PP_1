@@ -1,11 +1,7 @@
 #include "Matrix.hpp"
-#include <chrono>
 #include <conio.h>
 
-typedef std::chrono::duration<double> seconds;
-typedef std::chrono::high_resolution_clock Time;
-
-bool is_exists(const std::string& name) 
+bool is_exists(const std::string& name)
 {
 	struct stat buffer;
 	return (stat(name.c_str(), &buffer) == 0);
@@ -13,14 +9,14 @@ bool is_exists(const std::string& name)
 
 int main(int argc, char** argv)
 {
-	system("title Parallel Programming [Lab ¹ 1]");
+	system("title Parallel Programming [Lab ¹ 2]");
 
-	if (argc > 4)
+	if (argc > 4 || (argc == 2 && std::string(argv[1]) == "-help"))
 	{
-		std::cout	<< "Locate paths to matrix files in arguments and to output file (optional)\n"
-					<< "EXAMPLE:\n"
-					<< "    .../PP_1.exe <matrix_1_path> <matrix_2_path> <output_path>\n";
-        _exit(EXIT_FAILURE);
+		std::cout << "Locate paths to matrix files in arguments and to output file (optional)\n"
+			<< "EXAMPLE:\n"
+			<< "    .../PP_1.exe <matrix_1_path> <matrix_2_path> <output_path>\n";
+		_exit(EXIT_FAILURE);
 	}
 
 	std::string str[3];
@@ -70,7 +66,7 @@ int main(int argc, char** argv)
 		_exit(EXIT_FAILURE);
 	}
 
-	Matrix<unsigned long> a, b;
+	Matrix<unsigned long> a, b, c;
 
 	std::cout << "Reading matrix A";
 	read_file(a, str[0]);
@@ -79,16 +75,14 @@ int main(int argc, char** argv)
 	read_file(b, str[1]);
 
 	std::cout << "\rPerforming C = A * B";
-	auto start_time = Time::now();
-	Matrix<unsigned long> c = a * b;
-	auto end_time = Time::now();
-	
+	double runtime = multiply_matrix(a, b, c);
+
 	std::cout << "\rWriting matrix C to file [" << str[2] << "]";
-	write_file(c, seconds(end_time - start_time).count(), str[2]);
+	write_file(c, runtime, str[2]);
 	std::cout << "\r                                ";
-	for (int i = str[2].size(); i > 0; i--)
+	for (size_t i = str[2].size(); i > 0; i--)
 		std::cout << ' ';
-	
+
 	std::cout << "\rSaved matrix in file [" << str[2] << "]\n";
 	system("pause > nul");
 	return 0;

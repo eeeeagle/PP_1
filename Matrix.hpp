@@ -6,19 +6,28 @@
 #include <fstream>
 #include <sstream>
 #include <vector>
+#include <chrono>
+
+
+typedef std::chrono::duration<double> seconds;
+typedef std::chrono::high_resolution_clock Time;
 
 template<typename T>
 using Matrix = std::vector<std::vector<T>>;
 
+
 template<typename T>
-Matrix<T> operator *(const Matrix<T>&a, const Matrix<T>& b)
+double multiply_matrix(const Matrix<T>& a, const Matrix<T>& b, Matrix<T>& c) /* Return value: runtime of multiply matrix */
 {
 	const size_t n = a.size();
 	const size_t m = a.begin()->size();
 	const size_t p = b.begin()->size();
 
-	Matrix<T> c(n, std::vector<T>(p, 0));
-	for (size_t j = 0; j < p; ++j)
+	c = Matrix<T>(n, std::vector<T>(p, 0));
+
+	omp_set_num_threads(4);
+	auto start_time = Time::now();
+	for (int j = 0; j < p; ++j)
 	{
 		for (size_t k = 0; k < m; ++k)
 		{
@@ -26,8 +35,8 @@ Matrix<T> operator *(const Matrix<T>&a, const Matrix<T>& b)
 				c[i][j] += a[i][k] * b[k][j];
 		}
 	}
-
-	return c;
+	auto end_time = Time::now();
+	return seconds(end_time - start_time).count();
 }
 
 template<typename T>
@@ -56,7 +65,7 @@ void read_file(Matrix<T>& matrix, const std::string& filepath)
 		{
 			throw std::logic_error("No matrix in file \"" + filepath + '\"');
 		}
-		
+
 		const size_t size = matrix.begin()->size();
 		for (auto iter = matrix.begin() + 1; iter != matrix.end(); iter++)
 		{
@@ -95,7 +104,7 @@ void write_file(const Matrix<T>& matrix, const double& runtime, const std::strin
 			file << '\n';
 		}
 		file << '\n';
-		file << "Runtime: " << runtime << " microseconds\n";
+		file << "Runtime: " << runtime << " seconds\n";
 		file << " Volume: " << (matrix.size() * matrix.begin()->size()) << '\n';
 
 		file.close();
