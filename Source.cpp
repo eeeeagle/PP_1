@@ -9,7 +9,7 @@ bool is_exists(const std::string& name)
 
 int main(int argc, char** argv)
 {
-	system("title Parallel Programming [Lab ¹ 2]");
+	system("title Parallel Programming [Lab ¹ 1]");
 
 	if (argc > 4 || (argc == 2 && std::string(argv[1]) == "-help"))
 	{
