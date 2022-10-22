@@ -25,7 +25,6 @@ double multiply_matrix(const Matrix<T>& a, const Matrix<T>& b, Matrix<T>& c) /* 
 
 	c = Matrix<T>(n, std::vector<T>(p, 0));
 
-	omp_set_num_threads(4);
 	auto start_time = Time::now();
 	for (int j = 0; j < p; ++j)
 	{
