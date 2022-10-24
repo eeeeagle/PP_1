@@ -36,7 +36,7 @@ int main(int argc, char** argv)
 
 	if (argc > 4 || (argc == 2 && std::string(argv[1]) == "-help"))
 	{
-		std::cout << "Locate paths to matrix files in arguments, to output file\n\n"
+		std::cout << "Locate paths to matrix files in arguments, to output file (optional)\n\n"
 			<< "EXAMPLE:\n"
 			<< "    .../PP_1.exe <matrix_1_path> <matrix_2_path> <output_path>\n\n";
 		Sleep(TIMEOUT);
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
 	std::string str[3];
 	try
 	{
-		if (argc == 4)
+		if (argc == 3 || argc == 4)
 		{
 			if (!is_exists(argv[1]))
 				throw std::invalid_argument(std::to_string(1) + "]: " + argv[1] + " (File doesn't exist)");
@@ -56,7 +56,10 @@ int main(int argc, char** argv)
 				throw std::invalid_argument(std::to_string(2) + "]: " + argv[2] + " (File doesn't exist)");
 			str[1] = argv[2];
 
-			str[2] = argv[3];
+			if (argc == 4)
+				str[2] = argv[3];
+			else
+				str[2] = "output.txt";
 		}
 		else
 		{

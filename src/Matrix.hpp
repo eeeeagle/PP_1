@@ -22,6 +22,9 @@ template<typename T>
 double multiply_matrix(const Matrix<T>&a, const Matrix<T>& b, Matrix<T>& c)
 /* Return value: runtime of multiply matrix*/
 {
+	if (matrix_f.column_size != matrix_s.row_size) 
+		throw std::length_error("Multiplication is impossible");
+
 	const size_t n = a.size();
 	const size_t m = a.begin()->size();
 	const size_t p = b.begin()->size();
@@ -29,11 +32,11 @@ double multiply_matrix(const Matrix<T>&a, const Matrix<T>& b, Matrix<T>& c)
 	c = Matrix<T>(n, std::vector<T>(p, 0));
 
 	auto start_time = Time::now();
-	for (int j = 0; j < p; ++j)
+	for (size_t j = 0; j < p; j++)
 	{
-		for (size_t k = 0; k < m; ++k)
+		for (size_t k = 0; k < m; k++)
 		{
-			for (size_t i = 0; i < n; ++i)
+			for (size_t i = 0; i < n; i++)
 				c[i][j] += a[i][k] * b[k][j];
 		}
 	}
