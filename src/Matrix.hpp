@@ -25,7 +25,7 @@ double multiply_matrix(const Matrix<T>&a, const Matrix<T>& b, Matrix<T>& c)
 
 	try
 	{
-		if (n != p)
+		if (m != b.size())
 			throw std::logic_error("Multiplication is impossible: mismatch in matrix A rows and matrix B columns");
 	}
 	catch (const std::logic_error& ex)
@@ -96,7 +96,7 @@ void read_file(Matrix<T>& matrix, const std::string& filepath)
 }
 
 template<typename T>
-void write_file(const Matrix<T>& matrix, const double& runtime, const std::string& filepath)
+void write_file(const Matrix<T>& matrix, const std::string& filepath)
 {
 	try
 	{
@@ -107,17 +107,29 @@ void write_file(const Matrix<T>& matrix, const double& runtime, const std::strin
 		for (auto i = matrix.begin(); i != matrix.end(); i++) /* i - iterator for rows vector*/
 		{
 			for (auto j = i->begin(); j != i->end(); j++) /* j - iterator for i vector */
-			{
-				file << *j;
-				file << ' ';
-			}
-			if (i != matrix.end() - 1)
-				file << '\n';
+				file << *j << ' ';
+			file << '\n';
 		}
 
-		file << "\n\n";
-		file << "Runtime: " << runtime << " seconds\n";
-		file << " Volume: " << (matrix.size() * matrix.begin()->size());
+		file.close();
+	}
+	catch (std::ios_base::failure const& ex)
+	{
+		std::cout << "WRITING ERROR: " << ex.what() << '\n';
+		_exit(EXIT_FAILURE);
+	}
+}
+
+void add_file(const size_t& volume, const double& runtime, const std::string& filepath)
+{
+	try
+	{
+		std::ofstream file;
+		file.exceptions(std::ofstream::badbit);
+		file.open(filepath, std::ofstream::app);
+
+		file << '\n' << "Runtime" << ' ' << runtime << ' ' << " seconds" << '\n';
+		file << "Volume" << ' ' << volume;
 
 		file.close();
 	}

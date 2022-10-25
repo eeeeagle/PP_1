@@ -109,12 +109,16 @@ int main(int argc, char** argv)
 	double runtime = multiply_matrix(a, b, c);
 	
 	std::cout << "\rWriting matrix C to file [" << str[2] << "]";
-	write_file(c, runtime, str[2]);
+	write_file(c, str[2]);
 
 	std::cout << "\r                                ";
 	for (size_t i = str[2].size(); i > 0; i--)
 		std::cout << ' ';
 	
 	std::cout << "\rSaved matrix in file [" << str[2] << "]\n";
+
+	std::cout << "Checking results by Python's NumPy...\r";
+	std::cout << "Ended result ...\r";
+	add_file((c.size() * c.begin()->size()), runtime, str[2]);
 	return 0;
 }
