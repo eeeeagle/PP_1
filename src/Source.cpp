@@ -108,17 +108,44 @@ int main(int argc, char** argv)
 	std::cout << "\rPerforming C = A * B";
 	double runtime = multiply_matrix(a, b, c);
 	
-	std::cout << "\rWriting matrix C to file [" << str[2] << "]";
+	std::cout << "\rWriting matrix C to file [" << str[2] << "]\r";
 	write_file(c, str[2]);
 
-	std::cout << "\r                                ";
-	for (size_t i = str[2].size(); i > 0; i--)
+	for (size_t i = str[2].size() + 40; i > 0; i--)
 		std::cout << ' ';
 	
-	std::cout << "\rSaved matrix in file [" << str[2] << "]\n";
+	const std::string verificator_path = "verification.txt";
+	std::cout << "\rChecking results by Python's NumPy...\r";
+	system(("python verificator.py " + str[0] + ' ' + str[1] + ' ' + str[2] + " > " + verificator_path).c_str());
 
-	std::cout << "Checking results by Python's NumPy...\r";
-	std::cout << "Ended result ...\r";
-	add_file((c.size() * c.begin()->size()), runtime, str[2]);
+	std::string buffer = "False";
+	try
+	{
+		std::ifstream file;
+		file.exceptions(std::ifstream::badbit);
+		file.open(verificator_path);
+
+		getline(file, buffer);
+		file.close();
+		remove(verificator_path.c_str());
+	}
+	catch (std::ios_base::failure const& ex)
+	{
+		std::cout << "READING ERROR: " << ex.what() << '\n';
+		_exit(EXIT_FAILURE);
+	}
+	if (buffer == "False")
+	{
+		std::cout << "Matrix multiplication wasn't done correctly\n";
+		_exit(EXIT_FAILURE);
+	}
+	
+	std::cout << "Adding multiplication results in [" << str[2] << "]...\r";
+	for (size_t i = str[2].size() + 40; i > 0; i--)
+		std::cout << ' ';
+	add_matrix((c.size()* c.begin()->size()), runtime, str[2]);
+
+
+	std::cout << "\rMatrix multiplication was done correctly.\nSee results in [" << str[2] << "]\n\n";
 	return 0;
 }

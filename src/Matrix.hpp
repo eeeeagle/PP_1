@@ -120,7 +120,7 @@ void write_file(const Matrix<T>& matrix, const std::string& filepath)
 	}
 }
 
-void add_file(const size_t& volume, const double& runtime, const std::string& filepath)
+void add_matrix(const size_t& volume, const double& runtime, const std::string& filepath)
 {
 	try
 	{
