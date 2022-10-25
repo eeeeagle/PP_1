@@ -96,7 +96,7 @@ void read_file(Matrix<T>& matrix, const std::string& filepath)
 }
 
 template<typename T>
-void write_file(const Matrix<T>& matrix, const unsigned& runtime, const std::string& filepath)
+void write_file(const Matrix<T>& matrix, const double& runtime, const std::string& filepath)
 {
 	try
 	{
