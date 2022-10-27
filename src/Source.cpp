@@ -116,7 +116,7 @@ int main(int argc, char** argv)
 	
 	const std::string verificator_path = "verification.txt";
 	std::cout << "\rChecking results by Python's NumPy...\r";
-	system(("python verificator.py " + str[0] + ' ' + str[1] + ' ' + str[2] + " > " + verificator_path).c_str());
+	system(("Verificator.exe " + str[0] + ' ' + str[1] + ' ' + str[2] + " > " + verificator_path).c_str());
 
 	std::string buffer = "False";
 	try
